@@ -21,27 +21,38 @@ namespace ArthuisWebShop
             services.AddTransient<ISkuItemsList, MockItemRepo>();
             //services.AddSingleton
             //services.AddScoped
-
-            services.AddNodeServices();
             services.AddMvc();
+            services.AddNodeServices();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //});
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
+            //app.UseStaticFiles();
+            //app.UseMvcWithDefaultRoute();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+            }
+
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+
+            app.UseAuthentication();
+
+            app.UseMvc(cfg =>
+            {
+                cfg.MapRoute("Default",
+                  "{controller}/{action}/{id?}",
+                  new { controller = "Home", Action = "Index" });
+            });
+
         }
     }
 }

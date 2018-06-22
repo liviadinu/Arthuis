@@ -10,6 +10,6 @@ namespace ArthuisWebShop.Models.Interfaces
         IEnumerable<Item> GetAllItems();
         Item GetItemBySKU(int SKU);
         Item GetItemByDescription(string Description);
-
+        IEnumerable<Item> GetFlaggedList(FlagtType flag, int group);
     }
 }

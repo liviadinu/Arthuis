@@ -24,14 +24,25 @@ namespace ArthuisWebShop.Controllers
         public IActionResult Index()
         {
             var items = _itemRepository.GetAllItems().OrderBy(p => p.DisplayName);
-
             var homeViewModel = new HomeViewModel()
             {
                 Title = "Arthuis Catalog - Summer 2018",
-                Products = items.ToList()
+                NewProducts = _itemRepository.GetFlaggedList(FlagtType.NewArrival,8).OrderBy(p => p.DisplayName).ToList(),
+                FeaturedProducts = _itemRepository.GetFlaggedList(FlagtType.FeaturedProduct,8).OrderBy(p => p.DisplayName).ToList(),
+                DiscountedProducts = _itemRepository.GetFlaggedList(FlagtType.DiscountedProduct, 8).OrderBy(p => p.DisplayName).ToList(),
+                BestSellingProducts = _itemRepository.GetFlaggedList(FlagtType.BestSeller, 8).OrderBy(p => p.DisplayName).ToList(),
+                MostViewedProducts = _itemRepository.GetFlaggedList(FlagtType.MostViewed, 8).OrderBy(p => p.DisplayName).ToList(),
             };
-
             return View(homeViewModel);
+        }
+
+        public IActionResult ShopSidebar()
+        {
+            var shopGridModel = new ShopGridViewModel()
+            {
+                Title = "Products"
+            };
+            return View(shopGridModel);
         }
     }
 }

@@ -7,16 +7,18 @@ namespace ArthuisWebShop.Models
 {
     public class ItemPrices
     {
-        private int sKU;
 
         public ItemPrices(int sKU)
         {
             ItemSKU = sKU;
             Price = GetItemFixedPrice(sKU, false);
+            PriceDiscounted = GetItemDiscountPrice(sKU);
         }
 
         public int ItemSKU { get; set; }
         public decimal Price { get; set; }
+        public decimal PriceDiscounted { get; set; }
+        public decimal DiscountPercentage { get; set; }
         public decimal MaxDiscountPercAllowed { get; set; }
         public decimal SpecialPrice { get; set; }
 
@@ -34,5 +36,23 @@ namespace ArthuisWebShop.Models
             }
             return Price;
         }
+
+        public decimal GetItemDiscountPrice(int itemSKU)
+        {
+            DiscountPercentage = 50;
+
+            if (itemSKU != 0)
+            {               
+               var lastPrice = GetItemFixedPrice(itemSKU,false);
+                var discountPrice = lastPrice - (lastPrice * DiscountPercentage / 100);
+              return discountPrice;              
+            }
+
+            return Price;
+        }
+
     }
+
+
 }
+
